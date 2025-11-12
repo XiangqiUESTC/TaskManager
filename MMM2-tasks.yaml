@@ -1,0 +1,30 @@
+# PS
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 obs_agent_id=false name=qplex-std-without_id
+  output: outs/MMM2-QPLEX/1.out
+
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 obs_agent_id=false name=qplex-std-without_id
+  output: outs/MMM2-QPLEX/2.out
+  
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 obs_agent_id=false name=qplex-std-without_id
+  output: outs/MMM2-QPLEX/3.out
+
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 obs_agent_id=false name=qplex-std-without_id
+  output: outs/MMM2-QPLEX/4.out
+
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 obs_agent_id=false name=qplex-std-without_id
+  output: outs/MMM2-QPLEX/5.out
+# PS+id
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 name=qplex-std-with_id
+  output: outs/MMM2-QPLEX/6.out
+
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 name=qplex-std-with_id
+  output: outs/MMM2-QPLEX/7.out
+  
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 name=qplex-std-with_id
+  output: outs/MMM2-QPLEX/6.out
+
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 name=qplex-std-with_id
+  output: outs/MMM2-QPLEX/9.out
+
+- command: python src/main.py --config=qplex_qatten_sc2 --env-config=sc2 with env_args.map_name=MMM2 name=qplex-std-with_id
+  output: outs/MMM2-QPLEX/10.out
