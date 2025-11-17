@@ -22,6 +22,7 @@ def run_task(task, gpu_id=None):
     logger.info(f"启动任务: {command}")
     # 获取任务标准输出的重定向文件
     output = task["output"]
+    logger.info(f"任务日志将保存在:{output}")
     # 执行任务
     command = command.split()
     command = [sys.executable, "-W", "ignore"] + command[1:]
@@ -84,6 +85,7 @@ if __name__ == "__main__":
         
 
     ################################################################ 轮询所有任务，直到所有任务都提交
+    done_num = 0
     while True:
         time.sleep(1)
         # 如果所有任务都提交了，跳出循环
@@ -95,6 +97,7 @@ if __name__ == "__main__":
                 # 进程是否结束的条件判断
                 if popen.poll() is not None:
                     logger.info(f"任务{command}完成!将启动新任务!")
+                    logger.info(f"已经完成{done_num}个任务！")
                     popen = run_task(tasks[task_idx], gpu_id)
 
                     task_threads[i] = {
