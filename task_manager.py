@@ -97,6 +97,7 @@ if __name__ == "__main__":
                 # 进程是否结束的条件判断
                 if popen.poll() is not None:
                     logger.info(f"任务{command}完成!将启动新任务!")
+                    done_num += 1
                     logger.info(f"已经完成{done_num}个任务！")
                     popen = run_task(tasks[task_idx], gpu_id)
 
