@@ -42,7 +42,7 @@ def print_current_tasks(task_threads):
     logger = logging.getLogger("task_manage")
     task_infos = ""
     for i,thread in enumerate(task_threads):
-        task_infos += f"\t任务{i} [{thread['popen'].pid}]: {thread['task']['command']}\n" 
+        task_infos += f"\t任务{i} [{thread['popen'].pid}]: {thread['task']['command']} &> {thread['task']['output']}\n"
 
     logger.info(f"当前进程池任务状态:\n{task_infos}")
 
@@ -118,5 +118,7 @@ if __name__ == "__main__":
     ################################################################ 等待所有任务运行完
     for task in task_threads:
         task["popen"].wait()
+        done_num += 1
+        logger.info(f"已经完成{done_num}个任务！")
     logger.info("所有任务运行完毕！")
     ################################################################ 等待所有任务运行完
