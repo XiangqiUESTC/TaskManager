@@ -83,8 +83,6 @@ if __name__ == "__main__":
                     pid_list = remaining_pids
 
                     if not all_done:
-                        logger.info(f"仍有 {len(pid_list)} 个进程在运行: {pid_list}")
-                        logger.info("等待10秒后再次检查...")
                         time.sleep(10)  # 等待10秒再检查
                     else:
                         logger.info("所有等待的进程都已结束，开始执行新任务")
