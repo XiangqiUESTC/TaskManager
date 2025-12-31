@@ -7,4 +7,9 @@ TaskManager提供了一个轻量的python脚本和简易的yaml配置，你可�
 3. 假设你希望一次在显卡0上跑5组实验，直到跑完MMM2-tasks.yaml里面的所有命令，那么你可以运行：  
  **nohup python task_manager.py 5 0 MMM2-tasks.yaml &> MMM2-tasks_task.out&**  
 4. 总结来说，使用命令    
-**nohup python task_manager.py \[任务yaml文件名\] \[线程数\] \[显卡卡号\] &> \[日志文件\]&**
+**nohup python task_manager.py \[任务yaml文件名\] \[线程数\] \[显卡卡号\] \[要等待的进程PID1,\] &> \[日志文件\]&**
+# 二、更新日志
+1. TaskManger横空出世，帮助你自动化管理任务
+2. 添加了第四个参数，即要等待的进程序列，你可以使用  
+ **python task_manager.py task.yaml 3 0 32141,31891**  
+来让程序在PID为32141和31891的程序结束之后再执行0卡上的由task.yaml指定的任务

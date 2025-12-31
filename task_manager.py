@@ -38,6 +38,7 @@ def run_task(task, gpu_id=None):
                    , stderr=subprocess.STDOUT  # 将 stderr 也重定向到 stdout
                    )
 
+
 def print_current_tasks(task_threads):
     logger = logging.getLogger("task_manage")
     task_infos = ""
@@ -49,10 +50,50 @@ def print_current_tasks(task_threads):
 
 if __name__ == "__main__":
     logger = logging.getLogger("task_manage")
+    ################################################################ 检查是否需要等待其他进程
+    # 检查是否有第四个参数，如果有则表示需要等待的PID列表
+    if len(sys.argv) > 4:
+        pid_to_wait_str = sys.argv[4]
+        if pid_to_wait_str.strip():  # 如果不是空字符串
+            pid_list = [pid.strip() for pid in pid_to_wait_str.split(',') if pid.strip()]
+
+            if pid_list:
+                logger.info(f"开始等待以下PID进程完成: {pid_list}")
+
+                # 简单轮询检查进程是否结束
+                all_done = False
+                while not all_done:
+                    all_done = True
+                    remaining_pids = []
+
+                    for pid in pid_list:
+                        try:
+                            # 检查进程是否存在
+                            os.kill(int(pid), 0)
+                            # 如果没抛出异常，说明进程还在运行
+                            remaining_pids.append(pid)
+                            all_done = False
+                        except (OSError, ValueError) as e:
+                            # 进程不存在或无效PID
+                            if isinstance(e, OSError) and e.errno == 3:  # ESRCH: No such process
+                                logger.info(f"PID {pid} 已结束")
+                            # 其他情况（如权限问题）也认为进程不存在
+                            continue
+
+                    pid_list = remaining_pids
+
+                    if not all_done:
+                        logger.info(f"仍有 {len(pid_list)} 个进程在运行: {pid_list}")
+                        logger.info("等待10秒后再次检查...")
+                        time.sleep(10)  # 等待10秒再检查
+                    else:
+                        logger.info("所有等待的进程都已结束，开始执行新任务")
+    ################################################################ 检查是否需要等待其他进程
+
     ################################################################ 读取命令行参数和yaml
     # 获取yaml配置文件路径
     yaml_path = sys.argv[1]
-    # 获取命令行参数——线程数    
+    # 获取命令行参数——线程数
     threads_num = sys.argv[2]
     # 获取GPU id
     gpu_id = sys.argv[3]
@@ -61,7 +102,6 @@ if __name__ == "__main__":
         tasks = yaml.safe_load(f)
     ################################################################ 读取命令行参数和yaml
 
-    
     ################################################################ 初始化进程池
     logger.info(f"启动任务中！总线程数:{threads_num}", )
     # 默认未运行完
@@ -82,7 +122,6 @@ if __name__ == "__main__":
             time.sleep(1)
         task_idx += 1
     ################################################################ 初始化进程池
-        
 
     ################################################################ 轮询所有任务，直到所有任务都提交
     done_num = 0
@@ -111,7 +150,7 @@ if __name__ == "__main__":
                     # break掉，继续下一轮轮询，防止task_idx越界
                     break
                 else:
-                    continue    
+                    continue
         else:
             break
     ################################################################ 轮询所有任务，直到所有任务都提交
