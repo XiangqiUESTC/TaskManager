@@ -117,7 +117,7 @@ if __name__ == "__main__":
             }
 
             task_threads.append(thread)
-            time.sleep(1)
+            time.sleep(4)
         task_idx += 1
     ################################################################ 初始化进程池
 
