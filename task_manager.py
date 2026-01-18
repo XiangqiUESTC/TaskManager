@@ -17,12 +17,23 @@ logger.setLevel('INFO')
 
 def run_task(task, gpu_id=None):
     logger = logging.getLogger("task_manage")
+
+    # 新增：为 TensorBoard 时间戳避让，强制间隔 2 秒
+    time.sleep(2)
+
     # 获取任务的命令
     command = task["command"]
     logger.info(f"启动任务: {command}")
     # 获取任务标准输出的重定向文件
     output = task["output"]
     logger.info(f"任务日志将保存在:{output}")
+
+    # --- 新增：自动创建不存在的文件夹 ---
+    output_dir = os.path.dirname(output)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir, exist_ok=True)
+    # --------------------------------
+
     # 执行任务
     command = command.split()
     command = [sys.executable, "-W", "ignore"] + command[1:]
@@ -31,11 +42,11 @@ def run_task(task, gpu_id=None):
     env["CUDA_VISIBLE_DEVICES"] = gpu_id  # 只修改需要的环境变量
 
     # 返回任务控制
-    return subprocess.Popen(command
-                   , stdout=open(output, "w")
-                   , env=env
-                   , bufsize=0
-                   , stderr=subprocess.STDOUT  # 将 stderr 也重定向到 stdout
+    return subprocess.Popen(command,
+                            stdout=open(output, "w"),
+                            env=env,
+                            bufsize=0,
+                            stderr=subprocess.STDOUT  # 将 stderr 也重定向到 stdout
                    )
 
 
